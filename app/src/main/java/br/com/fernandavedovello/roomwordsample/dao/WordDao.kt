@@ -1,5 +1,6 @@
 package br.com.fernandavedovello.roomwordsample.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -10,7 +11,7 @@ import br.com.fernandavedovello.roomwordsample.model.Word
 interface WordDao {
 
     @Query("SELECT * from word_table ORDER BY word ASC")
-    fun getAllWords(): List<Word>
+    fun getAllWords(): LiveData<List<Word>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(word: Word)
