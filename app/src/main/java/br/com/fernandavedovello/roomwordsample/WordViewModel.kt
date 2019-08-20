@@ -4,24 +4,17 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
-import br.com.fernandavedovello.roomwordsample.dao.WordRoomDatabase
 import br.com.fernandavedovello.roomwordsample.model.Word
 import br.com.fernandavedovello.roomwordsample.repository.WordRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class WordViewModel(application: Application) : AndroidViewModel(application) {
+class WordViewModel(application: Application,
+                    val repositoryModel: WordRepository) : AndroidViewModel(application) {
 
-    private val repository: WordRepository
-    val allWords: LiveData<List<Word>>
-
-    init {
-        val wordsDao = WordRoomDatabase.getDatabase(application).wordDao()
-        repository = WordRepository(wordsDao)
-        allWords = repository.allWords
-    }
+    val allWords: LiveData<List<Word>> = repositoryModel.allWords
 
     fun insert(word: Word) = viewModelScope.launch(Dispatchers.IO) {
-        repository.insert(word)
+        repositoryModel.insert(word)
     }
 }
